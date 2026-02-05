@@ -1,37 +1,54 @@
 <div align="center">
 <h1>Case Canais</h1>
 
-![logo_case_canais](https://via.placeholder.com/150?text=Case+Canais)  
 </div>
 
 ---
 
 ## 📑 About the project
-**Case Canais** é um sistema desenvolvido em .NET para simular o recebimento e processamento de reclamações de clientes em diferentes canais para um cenário bancário.  
+Sistema desenvolvido em .NET para simular o recebimento e processamento de reclamações de clientes em diferentes canais para um cenário bancário.  
 
 O sistema recebe dados de dois canais principais:
 
-1. **Canal Físico:** documentos PDF digitalizados via scanner enviados para o S3.  
-2. **Canal Externo:** APIs externas simuladas que retornam reclamações (mocadas).  
-
-Após receber os dados, o sistema:  
-
-- Normaliza e categoriza as reclamações  
-- Enriquecimento do histórico do cliente via Datamesh fake  
-- Persistência no **DynamoDB**  
-- Notificação via **SNS**  
-- Processamento assíncrono via **SQS** e **EventBridge**  
-
-O objetivo é demonstrar **arquitetura hexagonal**, uso de AWS e boas práticas em **processamento assíncrono**.
+1. **Canal Físico:** documentos PDF via S3 (passivo)
+2. **Canal Externo:** APIs simuladas (ativo)
 
 ---
+
+## 🛠 Tech Stack
+
+- .NET 10
+- AWS: SQS, S3, EventBridge, Lambda, DynamoDB, SNS
+- Node.js (APIs externas simuladas)  
+- Arquitetura: Hexagonal
+- Outras libs: DotNetEnv, JsonSerializer
+
 
 ## 🔎 Architecture & Domain Model
 
 ### Flow Diagram
-> (Insira aqui o diagrama de fluxo do sistema, exemplo: `S3 → Worker → Textract → Datamesh → EventBridge → Lambda → DynamoDB + SNS`)
-
-![Architecture Diagram](./assets/architecture_diagram.png)
+```
+Canal Físico (PDF no S3)       Canal Externo (APIs)
+            │                          │
+            ▼                          ▼
+      EventBridge                EventBridge (Scheduler)
+            │                          │
+            ▼                          ▼
+           SQS  ◄────────────── Lambda (coleta dados)
+            │
+            ▼
+      Worker .NET
+            │
+            ▼
+ Normalização e Enriquecimento
+ (Textract fake + Datamesh fake)
+            │
+            ▼
+      EventBridge
+        │        │
+        ▼        ▼
+   Lambda → DynamoDB     SNS → Outros Sistemas
+```
 
 ### Domain Model
 
@@ -45,12 +62,10 @@ O objetivo é demonstrar **arquitetura hexagonal**, uso de AWS e boas práticas 
 
 ## 💻 How to run the project
 
-### Clone the project
+### Clone o projeto
 
 ```bash
-git clone https://github.com/seuusuario/case-canais.git
-cd case-canais
-
+git clone https://github.com/seuusuario/customer-complaints-platform.git
 
 ```
 
@@ -68,12 +83,12 @@ dotnet run --project ApiChamados.Infrastructure/Worker
 
 ```bash
 cd mock-apis/api-externa
-node index.js
+node {api}.js
 ```
 
 <br>
 
-### Configuração variáveis de ambiente
+## ⚙️ Configuração variáveis de ambiente
 
 ```bash
 AWS_ACCESS_KEY_ID=XXXX
@@ -92,7 +107,7 @@ SQS_QUEUE_URL_CHANNEL=XXXX
 ```
 
 
-### 📂 Project File Tree
+## 📂 Project File Tree
 
 ```
 ApiChamados.sln
@@ -168,37 +183,30 @@ ApiChamados.sln
         └─ Adapters/
             ├─ S3PdfStorageIntegrationTests.cs
             └─ SqsPublisherIntegrationTests.cs
-<img width="766" height="1635" alt="image" src="https://github.com/user-attachments/assets/4900682c-dbea-4a92-87ae-c1296e28a260" />
-
-
 
 ```
 
 
-### 🔔 Monitoring & Alerts
+## 🔔 Monitoring & Observability
 
-- CloudWatch Metrics / Logs: monitor Worker, Lambdas e filas SQS
-- SNS: alertas em caso de erro no processamento
-- Dead Letter Queue (DLQ): mensagens que falharam várias vezes
-- Evitar gargalos:
-  - Filas separadas por canal
-  - Escalabilidade de Workers conforme backlog
-  - Processamento assíncrono e desacoplado via EventBridge
- 
-🛠 Tech Stack
+- Logs: registros de execução e erro no Worker .NET, Lambdas e consumo das filas SQS
+- Métricas: contagem de mensagens processadas, falhas e tempo de execução
+- Rastreabilidade: cada etapa do fluxo gera logs permitindo acompanhar o ciclo completo da reclamação
+- Dead Letter Queue (DLQ): mensagens que falharem repetidamente são redirecionadas para análise posterior
 
-- .NET 7
-- AWS: SQS, S3, EventBridge, Lambda, DynamoDB, SNS
-- Node.js para APIs mocadas
-- Arquitetura: Hexagonal
-- Outras libs: DotNetEnv, JsonSerializer
-
-
+`
+O uso de SNS para alertas automáticos é considerado como evolução da solução, podendo ser integrado via CloudWatch Alarms em um cenário produtivo.
+`
 
 ### 📌 Additional Information
 
 APIs externas e Datamesh são simuladas para fins de teste do case.
 Para rodar, crie suas próprias credenciais AWS em .env.
 
-O fluxo completo inclui PDF → Textract → normalização → categorização → EventBridge → Lambda → DynamoDB + SNS.> Estrutura principal de entidades e objetos do sistema:
+### 📄 Documentação
 
+A documentação completa de arquitetura, fluxo, observabilidade e decisões técnicas está disponível em:
+
+```
+ /docs/architecture.md
+```
