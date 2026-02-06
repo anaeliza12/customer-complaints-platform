@@ -201,18 +201,5 @@ O uso de SNS para alertas automáticos é considerado como evolução da soluç�
 ### 📌 Additional Information
 
 APIs externas e Datamesh são simuladas para fins de teste do case.
-Para rodar, crie suas próprias credenciais AWS em .env.
 
-Exemplo de documentos PROCON e BACEN para S3 canal físico:
-```
- /docs/BACEN - Registro de Reclamação.md
- /docs/PROCON - Reclamação do Consumidor.md
-```
 
-### 📄 Documentação
-
-A documentação completa de arquitetura, fluxo, observabilidade e decisões técnicas está disponível em:
-
-```
- /docs/architecture.md
-```
