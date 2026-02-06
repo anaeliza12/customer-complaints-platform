@@ -1,3 +1,7 @@
 <Solution>
-  <Project Path="ApiChamados/ApiChamados.Application.csproj" />
+  <Project Path="ApiChamados.Adapters/ApiChamados.Adapters.csproj" Id="e922c752-dd23-41e4-9e4f-8c3c0b305e8a" />
+  <Project Path="ApiChamados.Application/ApiChamados.Application.csproj" />
+  <Project Path="ApiChamados.Domain/ApiChamados.Domain.csproj" Id="913a9bb2-adad-4044-9494-6941642934a7" />
+  <Project Path="ApiChamados.Host/ApiChamados.Host.csproj" />
+  <Project Path="ApiChamados.Tests/ApiChamados.Tests.csproj" Id="48259595-5f99-4a77-944b-74e5cc5a247a" />
 </Solution>

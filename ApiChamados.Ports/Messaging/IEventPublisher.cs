@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApiChamados.Application.UseCases
+namespace ApiChamados.Ports.Messaging
 {
-    internal class ReceberReclamacaoUseCase
+    internal interface IEventPublisher
     {
     }
 }

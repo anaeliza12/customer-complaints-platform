@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Exceptions\BusinessException.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="AWS.Logger.SeriLog" Version="4.0.2" />
+	  <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.22" />
+	  <PackageReference Include="AWSSDK.SQS" Version="4.0.2.14" />
+	  <PackageReference Include="DotNetEnv" Version="3.1.1" />
+	  <PackageReference Include="FluentValidation" Version="12.1.1" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
+	  <None Update=".env">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+	  <PackageReference Include="Serilog.Enrichers.Thread" Version="4.0.0" />
+	  <ProjectReference Include="..\ApiChamados.Domain\ApiChamados.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
