@@ -50,16 +50,6 @@ Canal Físico (PDF no S3)       Canal Externo (APIs)
    Lambda → DynamoDB     SNS → Outros Sistemas
 ```
 
-### Domain Model
-
-
--- criar domain model
-
-
-
-
----
-
 ## 💻 How to run the project
 
 ### Clone o projeto
